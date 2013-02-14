@@ -20,7 +20,7 @@ import com.serli.cameleon.model { ... }
 import org.apache.camel { Endpoint }
 
 
-shared ProcessorModel[] toProcessorModels(Iterable<ProcessorModel | Endpoint | String> steps) {
+shared ProcessorModel[] toProcessorModels({<ProcessorModel | Endpoint | String>*} steps) {
 	value processorModels = steps.collect<ProcessorModel> {
 		function collecting(ProcessorModel | Endpoint | String elem) {
 			if (is ProcessorModel elem) {
@@ -30,7 +30,7 @@ shared ProcessorModel[] toProcessorModels(Iterable<ProcessorModel | Endpoint | S
 				return ToModel(elem, null);
 			}
 			else {
-				return bottom;
+				return nothing;
 			}
 		}
 	};	
@@ -47,14 +47,14 @@ shared List<Element> fromJavaList<Element>(JList<Element>? javaList) {
 		}
 		Element[] values = sequenceBuilder.sequence;
 		if (nonempty values) {
-			return LazyList(values...);
+			return LazyList(values);
 		}
 		else {
-			return LazyList();
+			return LazyList(emptyOrSingleton(null));
 		}
 	}
 	else {
-		return LazyList();
+		return LazyList(emptyOrSingleton(null));
 	}	
 }
 
@@ -69,14 +69,14 @@ given Element satisfies Object {
 		}
 		Element[] values = sequenceBuilder.sequence;
 		if (nonempty values) {
-			return LazySet(values...);
+			return LazySet(values);
 		}
 		else {
-			return LazySet();
+			return LazySet(emptyOrSingleton(null));
 		}
 	}
 	else {
-		return LazySet();
+		return LazySet(emptyOrSingleton(null));
 	}
 }
 
@@ -94,13 +94,13 @@ given Value satisfies Object {
 		String[] keys = keysBuilder.sequence;
 		Value[] values = valuesBuilder.sequence;
 		if (nonempty keys, nonempty values) {
-			return LazyMap(zip(keys, values)...);
+			return LazyMap(zip(keys, values));
 		}
 		else {
-			return LazyMap();
+			return LazyMap(emptyOrSingleton<Entry<String, Value>>(null));
 		}
 	}
 	else {
-		return LazyMap();
+		return LazyMap(emptyOrSingleton<Entry<String, Value>>(null));
 	}
 }

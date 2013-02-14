@@ -19,21 +19,25 @@ import com.serli.cameleon {
 }
 
 import org.restlet { Response }
-import org.apache.camel.component.restlet { RestletConstants { responseHeader = \iRESTLET_RESPONSE} }
-import org.restlet.data { MediaType { textPlainMediaType = \iTEXT_PLAIN }, Status { successOK = \iSUCCESS_OK } }
+import org.apache.camel.component.restlet { 
+	RestletConstants { responseHeader = \iRESTLET_RESPONSE} }
+import org.restlet.data { 
+	MediaType { textPlainMediaType = \iTEXT_PLAIN }, 
+	Status { successOK = \iSUCCESS_OK } 
+}
 
 Routes restletServer = Routes {
 	route {
-	    from = { 
-	        "restlet:http://localhost:8080/cameleon/test/{name}",
-			"restlet:http://localhost:8080/cameleon/test"
-	    };
+	    from = [ 
+	        "restlet:http://localhost:8080/cameleon/com.serli.cameleon_test/{name}",
+			"restlet:http://localhost:8080/cameleon/com.serli.cameleon_test"			
+	    ];        
         choice {
             when {
 				Boolean condition (Exchange exchange)  {
 					value headers = exchange.inMessage.headers;
 					if (headers.defines("name")) {
-						exchange.inMessage.body := headers["name"];
+						exchange.inMessage.body = headers["name"];
 						return true;
 					}   
 					return false;
@@ -42,7 +46,7 @@ Routes restletServer = Routes {
 				process {
                     void processor(Exchange ex) {
                         if (exists msg = ex.outMessage) {
-                            msg.body := "Hello " ex.inMessage.body else "" "";
+                            msg.body = "Hello `` ex.inMessage.body else "" ``";
                         } 
                     }
                 }
@@ -55,29 +59,29 @@ Routes restletServer = Routes {
                             type = type<Response>;
                         };
                         if (exists response) { 
-                            response.status := successOK;
+                            response.status = successOK;
                             response.setEntity(
 "Hello From 
-    Address : " response.request.clientInfo.address "
-    Agent : " response.request.clientInfo.agent "
-"
-                                , textPlainMediaType);
+    Address : `` response.request.clientInfo.address ``
+    Agent : `` response.request.clientInfo.agent ``"
+                                   , textPlainMediaType);
                             ex.outMessage?.setBodyAs(response, type<Response>);
                         }
                     }
                 }
             }
-        },
+        }
+        ,        
         process {
-            processor = (Exchange exchange) {
-                exchange.outMessage?.body := 
+            void processor (Exchange exchange) {                
+                exchange.outMessage?.body = 
 "Cool, it works !
-" (is Response exchange.inMessage.body) 
+ `` (exchange.inMessage.body is Response) 
 	then (exchange.inMessage.mandatoryBodyAs<Response>(type<Response>).entityAsText) 
 	else exchange.inMessage.body?.string
-	else "Oh, no !" "
-"
-            };
-        }        
-	} 
+	else "Oh, no !"``
+ ";        
+            }
+        }
+	}
 };

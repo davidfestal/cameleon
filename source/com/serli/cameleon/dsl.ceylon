@@ -19,19 +19,16 @@ import org.apache.camel { Processor, NativeExchange = Exchange, Endpoint, Predic
 import org.apache.camel.model { ExpressionNodeHelper { toExpressionDefinition } , ... }
 import org.apache.camel.model.language { ... }
 import com.serli.cameleon.model { ... }
-import com.serli.cameleon.util { toSequence, toProcessorModels, castToPredicate }
+import com.serli.cameleon.util { toProcessorModels, castToPredicate, toSequence }
 
-shared Route route(Endpoint|String|Sequence<Endpoint|String> from, ProcessorModel | String | Endpoint ... pipeline)(NativeRouteBuilder builder) {
-	value seqBuilder = SequenceBuilder<ProcessorModel | String | Endpoint>();
-	seqBuilder.appendAll(pipeline...);
-	value pipelineSteps = seqBuilder.sequence;
-	if (nonempty pipelineSteps) {
-		return Route(toSequence<Endpoint|String>(from), pipelineSteps, builder);
+shared Route route(Endpoint|String|Sequence<Endpoint|String> from, {<ProcessorModel|String|Endpoint>+} pipeline)(NativeRouteBuilder builder) {
+	if (pipeline.size > 0) {
+		return Route(toSequence<Endpoint|String>(from), pipeline, builder);
 	}
 	throw Exception("Route should always have at least one output");
 }
 
-shared ProcessModel process(Void(Exchange) processor) {
+shared ProcessModel process(Anything(Exchange) processor) {
 	object nativeProcessor satisfies Processor {
 				
 				shared actual void process(NativeExchange? exchange) {
@@ -74,7 +71,7 @@ shared WhenCondition when(ExpressionBase | Boolean(Exchange) condition) {
 	return WhenCondition(resultExpression);
 }
 
-shared OtherwiseModel otherwise(ProcessorModel | Endpoint | String ... pipeline) {
+shared OtherwiseModel otherwise({<ProcessorModel|Endpoint|String>+} pipeline) {
 	value steps = toProcessorModels(pipeline);
 	if (nonempty steps) {
 		return OtherwiseModel(steps);		
@@ -82,8 +79,8 @@ shared OtherwiseModel otherwise(ProcessorModel | Endpoint | String ... pipeline)
 	throw Exception("An Otherwise clause must have at least one output");
 }
 
-shared ChoiceModel choice(ChoiceBranchModel... alternatives) {		
-		variable OtherwiseModel ? otherwiseClause := null;
+shared ChoiceModel choice({ChoiceBranchModel+} alternatives) {		
+		variable OtherwiseModel ? otherwiseClause = null;
 		value whenClausesBuilder = SequenceBuilder<WhenModel>();
 		
 		for (alt in alternatives) {
@@ -92,7 +89,7 @@ shared ChoiceModel choice(ChoiceBranchModel... alternatives) {
 				whenClausesBuilder.append(alt);
 			}
 			case (is OtherwiseModel) {
-				otherwiseClause := alt;
+				otherwiseClause = alt;
 			}
 		}		
 		
@@ -111,6 +108,6 @@ shared ToModel to(Endpoint | String endpoint, ExchangePattern? pattern = null) {
 }
 
 shared Element type<Element>() {
-	return bottom;
+	return nothing;
 }
 

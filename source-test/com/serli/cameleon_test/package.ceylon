@@ -14,11 +14,4 @@
    limitations under the License.
 */
 
-module test '1.0.0' {
-    import 'org.apache.camel:camel-core' '2.10.1';
-    import 'org.apache.camel:camel-stream' '2.10.1';
-	import com.serli.cameleon '1.0.0';
-	import 'org.slf4j:slf4j-simple' '1.6.6';
-	import 'org.apache.camel:camel-restlet' '2.10.1';
-	import 'org.restlet.jse:org.restlet' '2.0.14';
-} 
+shared package com.serli.cameleon_test;

@@ -14,8 +14,8 @@
    limitations under the License.
 */
 
-module com.serli.cameleon '1.0.0' {
-    import 'org.apache.camel:camel-core' '2.10.1';
-    import jdk.base '7';
-    import jdk.jaxws '7';
+shared module com.serli.cameleon '1.0.1' {
+	shared import 'org.apache.camel:camel-core' '2.10.1';
+    import java.base '7';
+    shared import javax.jaxws '7';
 }

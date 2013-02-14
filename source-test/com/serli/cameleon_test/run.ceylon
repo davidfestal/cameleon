@@ -14,15 +14,11 @@
    limitations under the License.
 */
 
-import org.apache.camel {
-	Main
-}
+import org.apache.camel { Main }
+import org.apache.camel.model { ModelHelper { dumpModelAsXml } }
 
-import org.apache.camel.model {
-	ModelHelper { dumpModelAsXml }
-}
 
-doc "Run the module `test`."
+doc "Run the module `com.serli.cameleon_test`."
 shared void run() {
 	object main extends Main() {
 		shared actual void afterStart() {
@@ -35,16 +31,18 @@ shared void run() {
     main.enableHangupSupport();
 	
 	// Generate a dot graph of the routes in the ./dot directory 
-    main.dotOutputDir := "dot";
-    main.aggregateDot := true;
+    main.dotOutputDir = "dot";
+    main.aggregateDot = true;
 
 	// add routes
 	main.addRouteBuilder(restletServer.builder);
         
     // run until you terminate the JVM
     print("Starting Camel. Use ctrl + c to terminate the JVM.\n");
-    print ("To test, hit the following URLs :
-    	http://localhost:8080/http://localhost:8080/cameleon/test
-    	http://localhost:8080/http://localhost:8080/cameleon/test/<your name>");
+    print("To com.serli.cameleon_test, hit the following URLs :
+           http://localhost:8080/http://localhost:8080/cameleon/com.serli.cameleon_test
+    	      http://localhost:8080/http://localhost:8080/cameleon/com.serli.cameleon_test/<your name>");
     main.run();
 }
+
+

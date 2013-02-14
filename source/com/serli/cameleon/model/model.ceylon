@@ -20,11 +20,11 @@ import org.apache.camel { Processor, Endpoint, ExchangePattern}
 import com.serli.cameleon.util { addOutput, toProcessorModels, setOtherwise }
 
 shared class Route(Sequence<Endpoint|String> from, 
-Sequence<ProcessorModel | String | Endpoint> steps, 
+{<ProcessorModel | String | Endpoint>+} steps, 
 NativeRouteBuilder builder) {
 	shared RouteDefinition definition;
 	value firstEndpoint = from.first;
-	
+
 	if (is Endpoint firstEndpoint) {
 		definition = builder.from(firstEndpoint);
 	}
@@ -52,24 +52,24 @@ NativeRouteBuilder builder) {
 }
 
 shared class RouteSteps(outputs) {
-	shared Iterable<ProcessorModel> outputs;
+	shared {ProcessorModel*} outputs;
 	shared actual String string = outputs.string;
 }
 
-shared abstract class ProcessorModel(ProcessorModel... outputs) 
+shared abstract class ProcessorModel({ProcessorModel*} outputs) 
 of ChoiceModel | ExpressionNodeModel | NoOutputModel | OutputModel {
 	shared formal Object definition;
 }
 
 shared abstract class NoOutputModel() 
 of ProcessModel | SendModel 
-extends ProcessorModel() {
+extends ProcessorModel({}) {
 	
 }
 
-shared abstract class OutputModel(Sequence<ProcessorModel> outputs) 
+shared abstract class OutputModel({ProcessorModel*} outputs) 
 of OtherwiseModel  
-extends ProcessorModel(outputs...) {
+extends ProcessorModel(outputs) {
 	
 }
 
@@ -85,7 +85,7 @@ extends NoOutputModel() {
 	
 }
 
-shared class ToModel(Endpoint | String endpoint, ExchangePattern? pattern) 
+shared class ToModel(Endpoint|String endpoint, ExchangePattern? pattern) 
 extends SendModel() {
 	shared actual ToDefinition definition;
 	if (exists pattern) {
@@ -113,13 +113,13 @@ extends SendModel() {
 	shared actual String string = definition.string;
 }
 
-shared abstract class ExpressionNodeModel(ExpressionBase expression, Sequence<ProcessorModel> outputs ) 
-extends ProcessorModel(outputs...) {
+shared abstract class ExpressionNodeModel(ExpressionBase expression, {ProcessorModel*} outputs ) 
+extends ProcessorModel(outputs) {
 	
 }
 
 shared class ChoiceModel(Sequence<WhenModel> when, OtherwiseModel ? otherwise) 
-extends ProcessorModel() {
+extends ProcessorModel({}) {
 	shared actual ChoiceDefinition definition = ChoiceDefinition();
 	for (whenClause in when) {
 		definition.whenClauses.add(whenClause.definition);
@@ -131,7 +131,7 @@ extends ProcessorModel() {
 }
 
 shared class WhenCondition(ExpressionBase condition) {
-	shared WhenModel do(ProcessorModel | Endpoint | String ... pipeline) {
+	shared WhenModel do({<ProcessorModel|Endpoint|String>+} pipeline) {
 		value steps = toProcessorModels(pipeline);
 		if (nonempty steps) {
 			return WhenModel(condition, steps);		
@@ -145,7 +145,7 @@ shared interface ChoiceBranchModel
 	
 }
 
-shared class WhenModel(ExpressionBase when, Sequence<ProcessorModel> outputs) extends ExpressionNodeModel(when, outputs)
+shared class WhenModel(ExpressionBase when, {ProcessorModel*} outputs) extends ExpressionNodeModel(when, outputs)
 	satisfies ChoiceBranchModel {
 	shared actual WhenDefinition definition = WhenDefinition(when.definition);
 	for (output in outputs) {
@@ -154,7 +154,7 @@ shared class WhenModel(ExpressionBase when, Sequence<ProcessorModel> outputs) ex
 	shared actual String string = definition.string;
 }
 
-shared class OtherwiseModel(Sequence<ProcessorModel> outputs) extends OutputModel(outputs) 
+shared class OtherwiseModel({ProcessorModel*} outputs) extends OutputModel(outputs) 
 	satisfies ChoiceBranchModel {
 	shared actual OtherwiseDefinition definition = OtherwiseDefinition();
 	for (output in outputs) {

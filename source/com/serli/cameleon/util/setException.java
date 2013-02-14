@@ -23,19 +23,19 @@ import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 
-@Ceylon(major = 3)
+@Ceylon(major = 4)
 @Method
 public class setException {
 	private setException() {}
 	
 	@SuppressWarnings({ })
-	@TypeInfo("Void")
+	@TypeInfo("ceylon.language::Anything")
 	public static void setException(
 			@Name("exchange") 
-			@TypeInfo("org.apache.camel.Exchange")
+			@TypeInfo("org.apache.camel::Exchange")
 			final Exchange exchange, 
 			@Name("exception") 
-			@TypeInfo("ceylon.language.Exception")
+			@TypeInfo("ceylon.language::Exception")
 			final Throwable exception) {
 		exchange.setException(exception);
     }

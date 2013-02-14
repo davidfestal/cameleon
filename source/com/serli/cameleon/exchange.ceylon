@@ -62,7 +62,7 @@ shared class Exchange(nativeExchange) {
 
 	throws(ClassCastException, "if the className doesn't name a Throwable")  
 	throws(ClassNotFoundException, "if the className doesn't name a known class")
-	shared T? exceptionAs<T>(Callable<T> type) {
+	shared T? exceptionAs<T>(T() type) {
 		return nativeExchange.getException(clazz(type)); 
 	}
 	
@@ -70,7 +70,7 @@ shared class Exchange(nativeExchange) {
 		return nativeExchange.exchangeId;
 	}
 	assign exchangeId {
-		nativeExchange.exchangeId := exchangeId;
+		nativeExchange.exchangeId = exchangeId;
 	}
 
 	shared Boolean? externalRedelivered {
@@ -102,7 +102,7 @@ shared class Exchange(nativeExchange) {
 		return nativeExchange.unitOfWork;
 	}
 	assign unitOfWork {
-		nativeExchange.unitOfWork := unitOfWork else nullObject();
+		nativeExchange.unitOfWork = unitOfWork else nullObject();
 	}
 
 	shared Boolean hasOut {
@@ -113,7 +113,7 @@ shared class Exchange(nativeExchange) {
 		return nativeExchange.pattern;
 	}
 	assign pattern {
-		nativeExchange.pattern := pattern;
+		nativeExchange.pattern = pattern;
 	}
 
 	shared Boolean hasProperties {
@@ -124,10 +124,10 @@ shared class Exchange(nativeExchange) {
 		return Message(nativeExchange.\iin);
 	}
 	assign inMessage {
-		nativeExchange.\iin := inMessage.nativeMessage;
+		nativeExchange.\iin = inMessage.nativeMessage;
 	} 
 
-	shared T? inMessageAs<T>(Callable<T> type) {
+	shared T? inMessageAs<T>(T() type) {
 		return nativeExchange.getIn(clazz(type));
 	}
 	
@@ -141,10 +141,10 @@ shared class Exchange(nativeExchange) {
 		}
 	}
 	assign outMessage {
-		nativeExchange.\iout := outMessage?.nativeMessage else nullObject();
+		nativeExchange.\iout = outMessage?.nativeMessage else nullObject();
 	}
 	
-	shared T? outMessageAs<T>(Callable<T> type) {
+	shared T? outMessageAs<T>(T() type) {
 		return nativeExchange.getOut(clazz(type));
 	}
 		
@@ -156,7 +156,7 @@ shared class Exchange(nativeExchange) {
 		nativeExchange.setProperty(name, propertyValue);
 	}
 
-	shared T? propertyAs<T>(String name, Callable<T> type) {
+	shared T? propertyAs<T>(String name, T() type) {
 		return nativeExchange.getProperty(name, clazz(type));
 	}
 		

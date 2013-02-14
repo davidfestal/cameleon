@@ -60,7 +60,7 @@ shared class Message(nativeMessage) {
 	}
 	assign fault {
 		
-		nativeMessage.fault := fault; 
+		nativeMessage.fault = fault; 
 	}
 
 	shared DataHandler? getAttachment(String string) {
@@ -71,14 +71,14 @@ shared class Message(nativeMessage) {
 		return nativeMessage.body;
 	}
 	assign body {
-			nativeMessage.body := body else nullObject();
+			nativeMessage.body = body else nullObject();
 	}
 	
-	shared T? bodyAs<T>(Callable<T> type) {
+	shared T? bodyAs<T>(T() type) {
 		return nativeMessage.getBody(clazz(type));
 	}	
 	
-	shared void setBodyAs<T>(T? body, Callable<T> type) {
+	shared void setBodyAs<T>(T? body, T() type) {
 		nativeMessage.setBody(body else nullObject(), clazz(type));
 	}	
 
@@ -86,7 +86,7 @@ shared class Message(nativeMessage) {
 		nativeMessage.setHeader(name, header);
 	}
 
-	shared T? headerAs<T>(String header, Callable<T> type) {
+	shared T? headerAs<T>(String header, T() type) {
 		return nativeMessage.getHeader(header, clazz(type));
 	}
 	
@@ -95,7 +95,7 @@ shared class Message(nativeMessage) {
 		return nativeMessage.mandatoryBody;
 	}
 
-	shared T mandatoryBodyAs<T>(Callable<T> type) {
+	shared T mandatoryBodyAs<T>(T() type) {
 		return nativeMessage.getMandatoryBody<T>(clazz(type)); 
 	}
 	
@@ -113,7 +113,7 @@ shared class Message(nativeMessage) {
 		return nativeMessage.messageId;
 	}
 	assign messageId {
-		nativeMessage.messageId := messageId;
+		nativeMessage.messageId = messageId;
 	}
 
 	shared void removeAttachment(String string) {
@@ -124,7 +124,7 @@ shared class Message(nativeMessage) {
 		return nativeMessage.removeHeader(string);
 	}
 
-	shared Boolean removeHeaders(String pattern, String ... excludePatterns) {
-		return nativeMessage.removeHeaders(string, excludePatterns...);
+	shared Boolean removeHeaders(String pattern, String* excludePatterns) {
+		return nativeMessage.removeHeaders(string, *excludePatterns);
 	}
 }

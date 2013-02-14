@@ -16,12 +16,7 @@
 
 package com.serli.cameleon.util;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import ceylon.language.Iterable;
 import ceylon.language.Singleton;
-import ceylon.language.emptyOrSingleton_;
 
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
 import com.redhat.ceylon.compiler.java.metadata.Method;
@@ -30,17 +25,17 @@ import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
 
-@Ceylon(major = 3)
+@Ceylon(major = 4)
 @Method
 public final class toSequence {
 	private toSequence() {}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@TypeParameters({ @TypeParameter(value="Element") } )
-	@TypeInfo("ceylon.language.Sequence<Element>")
+	@TypeInfo("ceylon.language::Sequence<Element>")
 	public static <Element> ceylon.language.Sequence<? extends Element> toSequence(
 			@Name("elements") 
-			@TypeInfo("Element|ceylon.language.Sequence<Element>")
+			@TypeInfo("Element|ceylon.language::Sequence<Element>")
 			final Object oneOrSeveralElements) {
 		if (oneOrSeveralElements instanceof ceylon.language.Sequence) {
 			return (ceylon.language.Sequence<Element>) oneOrSeveralElements;

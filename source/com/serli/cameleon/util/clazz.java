@@ -23,7 +23,7 @@ import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
 
-@Ceylon(major = 3)
+@Ceylon(major = 4)
 @Method
 public final class clazz {
 	private clazz() {}
@@ -31,10 +31,10 @@ public final class clazz {
 	private final static String prefixToDrop = "ceylon.language::Callable<";
 	@SuppressWarnings({ "unchecked" })
 	@TypeParameters({ @TypeParameter(value="Element") })
-	@TypeInfo("java.lang.Class<Element>")
+	@TypeInfo("java.lang::Class<Element>")
 	public static <Element> Class<Element> clazz(
 			@Name("callable") 
-			@TypeInfo("ceylon.language.Callable<Element>")
+			@TypeInfo("ceylon.language::Callable<Element,ceylon.language::Empty>")
 			final Object callable) throws ClassNotFoundException {
 			String callableString = callable.toString();
 			String className = callableString.replace(prefixToDrop, "");

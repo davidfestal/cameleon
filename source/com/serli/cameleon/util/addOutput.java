@@ -24,19 +24,19 @@ import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 
-@Ceylon(major = 3)
+@Ceylon(major = 4)
 @Method
 public final class addOutput {
 	private addOutput() {}
 	
 	@SuppressWarnings({ "rawtypes" })
-	@TypeInfo("Void")
+	@TypeInfo("Anything")
 	public static void addOutput(
 			@Name("container") 
-			@TypeInfo("ceylon.language.Object")
+			@TypeInfo("ceylon.language::Object")
 			final Object container, 
 			@Name("output") 
-			@TypeInfo("ceylon.language.Object")
+			@TypeInfo("ceylon.language::Object")
 			final Object output) {
 		if (! (output instanceof ProcessorDefinition)) {
 			return;

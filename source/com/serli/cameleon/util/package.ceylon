@@ -14,4 +14,4 @@
    limitations under the License.
 */
 
-shared package com.serli.cameleon.util;
+package com.serli.cameleon.util;

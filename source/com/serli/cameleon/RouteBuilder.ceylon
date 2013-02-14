@@ -20,7 +20,7 @@ import org.apache.camel { CamelContext}
 import com.serli.cameleon.model { ... } 
 
 
-shared class Routes(CamelContext? theContext = null, Route(NativeRouteBuilder)... routesToBuild) {
+shared class Routes({Route(NativeRouteBuilder)+} routesToBuild, CamelContext? theContext = null) {
 	shared object builder extends NativeRouteBuilder(theContext) {
 		shared actual void configure() {
 			for (routeToBuild in routesToBuild) {
