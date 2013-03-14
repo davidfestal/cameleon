@@ -19,9 +19,11 @@ package com.serli.cameleon.util;
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
 import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
+import com.redhat.ceylon.compiler.java.metadata.Ignore;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
+import com.redhat.ceylon.compiler.java.runtime.model.TypeDescriptor;
 
 @Ceylon(major = 4)
 @Method
@@ -33,6 +35,7 @@ public final class clazz {
 	@TypeParameters({ @TypeParameter(value="Element") })
 	@TypeInfo("java.lang::Class<Element>")
 	public static <Element> Class<Element> clazz(
+	        @Ignore TypeDescriptor td,
 			@Name("callable") 
 			@TypeInfo("ceylon.language::Callable<Element,ceylon.language::Empty>")
 			final Object callable) throws ClassNotFoundException {

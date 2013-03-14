@@ -17,10 +17,12 @@
 package com.serli.cameleon.util;
 
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
+import com.redhat.ceylon.compiler.java.metadata.Ignore;
 import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
+import com.redhat.ceylon.compiler.java.runtime.model.TypeDescriptor;
 
 @Ceylon(major = 4)
 @Method
@@ -30,7 +32,7 @@ public final class nullObject {
 
     @TypeParameters({ @TypeParameter(value="Element") })
     @TypeInfo("Element")
-    public static <Element> Element nullObject() {
+    public static <Element> Element nullObject(@Ignore TypeDescriptor td) {
         return null;
     }
     

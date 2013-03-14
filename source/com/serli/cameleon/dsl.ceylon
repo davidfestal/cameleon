@@ -19,13 +19,21 @@ import org.apache.camel { Processor, NativeExchange = Exchange, Endpoint, Predic
 import org.apache.camel.model { ExpressionNodeHelper { toExpressionDefinition } , ... }
 import org.apache.camel.model.language { ... }
 import com.serli.cameleon.model { ... }
-import com.serli.cameleon.util { toProcessorModels, castToPredicate, toSequence }
+import com.serli.cameleon.util { toProcessorModels, castToPredicate }
 
-shared Route route(Endpoint|String|Sequence<Endpoint|String> from, {<ProcessorModel|String|Endpoint>+} pipeline)(NativeRouteBuilder builder) {
-	if (pipeline.size > 0) {
-		return Route(toSequence<Endpoint|String>(from), pipeline, builder);
-	}
-	throw Exception("Route should always have at least one output");
+shared Route route(Endpoint|String|[<Endpoint|String>+] from, {<ProcessorModel|String|Endpoint>+} pipeline)(NativeRouteBuilder builder) {
+    [<Endpoint|String>+] fromSequential;
+    if (is Endpoint | String from) {
+        fromSequential = [from];
+    }
+    else if (is [<Endpoint|String>+] from){
+        fromSequential = from;
+    }
+    else {
+        fromSequential = [""]; // Should never occur
+    }
+    
+	return Route(fromSequential, pipeline, builder);
 }
 
 shared ProcessModel process(Anything(Exchange) processor) {
@@ -44,30 +52,36 @@ shared ProcessModel process(Anything(Exchange) processor) {
 }
 
 shared WhenCondition when(ExpressionBase | Boolean(Exchange) condition) {
-	ExpressionBase resultExpression;  
-
+	ExpressionBase? resultExpression;
+    
 	if (is ExpressionBase condition){
 		resultExpression = condition;
 	}
-	else {
-		Boolean(Exchange) p = castToPredicate<Exchange>(condition);
+	else if (is Boolean(Exchange) condition){
 		object predicate satisfies Predicate {
 			shared actual Boolean matches(NativeExchange? exchange) {
 				if (exists exchange) {
-					return p(Exchange(exchange));
+					return condition(Exchange(exchange));
 				}
 				return false;
 			}
 			shared actual String string {
-					return "Predicate-" + p.string;
+					return "Predicate-" + condition.string;
 				}
 		}
 		object expressionBase extends ExpressionBase() {
 			shared actual ExpressionDefinition definition = toExpressionDefinition(predicate);	
 		}
-		resultExpression = expressionBase;								
+		resultExpression = expressionBase;
+	}
+	else {
+		resultExpression = null;
 	}
 	
+
+	doc "Should never occur"
+    assert(exists resultExpression);
+
 	return WhenCondition(resultExpression);
 }
 
