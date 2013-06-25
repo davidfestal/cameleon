@@ -21,16 +21,16 @@ import java.lang {
 import org.apache.camel {
 	NativeExchange = Exchange, NativeMessage = Message, ExchangePattern, CamelContext, Endpoint
 }
-import com.serli.cameleon.util { 
+import com.serli.cameleon.core.util { 
 	setException,
 	fromJavaList, 
 	fromJavaMap, 
-	clazz, 
 	nullObject 
 }
 
 import java.lang { ClassCastException, ClassNotFoundException }
 import org.apache.camel.spi { Synchronization, UnitOfWork }
+import ceylon.interop.java { javaClass }
 
 shared class Exchange(nativeExchange) {
 	shared NativeExchange nativeExchange;
@@ -62,8 +62,8 @@ shared class Exchange(nativeExchange) {
 
 	throws(ClassCastException, "if the className doesn't name a Throwable")  
 	throws(ClassNotFoundException, "if the className doesn't name a known class")
-	shared T? exceptionAs<T>(T() type) {
-		return nativeExchange.getException(clazz(type)); 
+	shared T? exceptionAs<T>() {
+		return nativeExchange.getException(javaClass<T>()); 
 	}
 	
 	shared String exchangeId {
@@ -128,7 +128,7 @@ shared class Exchange(nativeExchange) {
 	} 
 
 	shared T? inMessageAs<T>(T() type) {
-		return nativeExchange.getIn(clazz(type));
+		return nativeExchange.getIn(javaClass<T>());
 	}
 	
 	shared Message? outMessage {
@@ -145,7 +145,7 @@ shared class Exchange(nativeExchange) {
 	}
 	
 	shared T? outMessageAs<T>(T() type) {
-		return nativeExchange.getOut(clazz(type));
+		return nativeExchange.getOut(javaClass<T>());
 	}
 		
 	shared Object? removeProperty(String string) {
@@ -157,7 +157,7 @@ shared class Exchange(nativeExchange) {
 	}
 
 	shared T? propertyAs<T>(String name, T() type) {
-		return nativeExchange.getProperty(name, clazz(type));
+		return nativeExchange.getProperty(name, javaClass<T>());
 	}
 		
 

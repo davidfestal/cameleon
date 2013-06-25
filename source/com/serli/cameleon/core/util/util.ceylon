@@ -16,7 +16,7 @@
 
 import java.util { JMap = Map, JList = List, JSet = Set }
 import java.lang { JString = String }
-import com.serli.cameleon.model { ... }
+import com.serli.cameleon.core.model { ... }
 import org.apache.camel { Endpoint }
 
 

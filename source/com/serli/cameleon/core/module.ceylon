@@ -14,11 +14,12 @@
    limitations under the License.
 */
 
-module com.serli.cameleon_test '1.0.0' {
-    import 'org.apache.camel:camel-core' '2.10.1';
-    import 'org.apache.camel:camel-stream' '2.10.1';
-	import com.serli.cameleon '1.0.1';
-	import 'org.slf4j:slf4j-simple' '1.6.6';
-	import 'org.apache.camel:camel-restlet' '2.10.1';
-	import 'org.restlet.jse:org.restlet' '2.0.14';
-} 
+shared module com.serli.cameleon.core '1.0.1' {
+	shared import 'org.apache.camel:camel-core' '2.10.1';
+    shared import java.base '7';
+	shared import 'com.sun.xml.bind.jaxb-impl' '2.2.5';
+	shared import 'org.slf4j.slf4j-api' '1.6.6';
+    shared import javax.jaxws '7';
+    shared import ceylon.collection '0.6';
+    shared import ceylon.interop.java '0.6';
+}

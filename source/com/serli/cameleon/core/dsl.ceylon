@@ -18,10 +18,10 @@ import org.apache.camel.builder { NativeRouteBuilder = RouteBuilder}
 import org.apache.camel { Processor, NativeExchange = Exchange, Endpoint, Predicate, ExchangePattern }
 import org.apache.camel.model { ExpressionNodeHelper { toExpressionDefinition } , ... }
 import org.apache.camel.model.language { ... }
-import com.serli.cameleon.model { ... }
-import com.serli.cameleon.util { toProcessorModels, castToPredicate }
+import com.serli.cameleon.core.model { ... }
+import com.serli.cameleon.core.util { toProcessorModels }
 
-shared Route route(Endpoint|String|[<Endpoint|String>+] from, {<ProcessorModel|String|Endpoint>+} pipeline)(NativeRouteBuilder builder) {
+shared Route route(Endpoint|String|[<Endpoint|String>+] from, {<ProcessorModel|String|Endpoint>+} pipeline)(RouteBuilder builder) {
     [<Endpoint|String>+] fromSequential;
     if (is Endpoint | String from) {
         fromSequential = [from];
@@ -38,49 +38,29 @@ shared Route route(Endpoint|String|[<Endpoint|String>+] from, {<ProcessorModel|S
 
 shared ProcessModel process(Anything(Exchange) processor) {
 	object nativeProcessor satisfies Processor {
-				
-				shared actual void process(NativeExchange? exchange) {
-					if (exists exchange) {
-						processor(Exchange(exchange));
-					}
-				}
-				shared actual String string {
-					return "Processor-" + processor.string;
+			
+			shared actual void process(NativeExchange? exchange) {
+				if (exists exchange) {
+					processor(Exchange(exchange));
 				}
 			}
+			shared actual String string {
+				return "Processor-" + processor.string;
+			}
+		}
 	return ProcessModel(nativeProcessor);
 }
 
 shared WhenCondition when(ExpressionBase | Boolean(Exchange) condition) {
-	ExpressionBase? resultExpression;
+	ExpressionBase resultExpression;
     
-	if (is ExpressionBase condition){
-		resultExpression = condition;
-	}
-	else if (is Boolean(Exchange) condition){
-		object predicate satisfies Predicate {
-			shared actual Boolean matches(NativeExchange? exchange) {
-				if (exists exchange) {
-					return condition(Exchange(exchange));
-				}
-				return false;
-			}
-			shared actual String string {
-					return "Predicate-" + condition.string;
-				}
-		}
-		object expressionBase extends ExpressionBase() {
-			shared actual ExpressionDefinition definition = toExpressionDefinition(predicate);	
-		}
-		resultExpression = expressionBase;
-	}
-	else {
-		resultExpression = null;
-	}
-	
-
-	doc "Should never occur"
-    assert(exists resultExpression);
+    switch(condition) 
+    case(is ExpressionBase) {
+        resultExpression = condition;
+    }
+    case(is Boolean(Exchange)) {
+        resultExpression = PredicateExpression(condition);
+    }
 
 	return WhenCondition(resultExpression);
 }
@@ -119,9 +99,5 @@ shared ChoiceModel choice({ChoiceBranchModel+} alternatives) {
 
 shared ToModel to(Endpoint | String endpoint, ExchangePattern? pattern = null) {
 	return ToModel(endpoint, pattern);
-}
-
-shared Element type<Element>() {
-	return nothing;
 }
 

@@ -14,7 +14,7 @@
    limitations under the License.
 */
 
-import com.serli.cameleon {
+import com.serli.cameleon.core {
 	...
 }
 
@@ -26,7 +26,7 @@ import org.restlet.data {
 	Status { successOK = \iSUCCESS_OK } 
 }
 
-Routes restletServer = Routes {
+RouteBuilder restletServer = RouteBuilder {
 	route {
 	    from = [ 
 	        "restlet:http://localhost:8080/cameleon/com.serli.cameleon_test/{name}",
@@ -54,18 +54,14 @@ Routes restletServer = Routes {
             otherwise {
                 process {
                     void processor(Exchange ex) {
-                        value response = ex.inMessage.headerAs {
-                            header = responseHeader;
-                            type = type<Response>;
-                        };
-                        if (exists response) { 
+                        if (exists response = ex.inMessage.headerAs<Response>(responseHeader)) { 
                             response.status = successOK;
                             response.setEntity(
 "Hello From 
     Address : `` response.request.clientInfo.address ``
     Agent : `` response.request.clientInfo.agent ``"
                                    , textPlainMediaType);
-                            ex.outMessage?.setBodyAs(response, type<Response>);
+                            ex.outMessage?.setBodyAs<Response>(response);
                         }
                     }
                 }
@@ -75,9 +71,9 @@ Routes restletServer = Routes {
         process {
             void processor (Exchange exchange) {                
                 exchange.outMessage?.body = 
-"Cool, it works !
- `` (exchange.inMessage.body is Response) 
-	then (exchange.inMessage.mandatoryBodyAs<Response>(type<Response>).entityAsText) 
+" Cool, it works !
+  `` (exchange.inMessage.body is Response) 
+	then (exchange.inMessage.mandatoryBodyAs<Response>().entityAsText) 
 	else exchange.inMessage.body?.string
 	else "Oh, no !"``
  ";        

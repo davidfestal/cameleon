@@ -14,4 +14,4 @@
    limitations under the License.
 */
 
-shared package com.serli.cameleon_test;
+shared package com.serli.cameleon_test.core;

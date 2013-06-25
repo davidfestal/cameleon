@@ -1,4 +1,4 @@
-/*
+	/*
   Copyright 2012 SERLI
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,4 +14,11 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+module com.serli.cameleon_test.core '1.0.0' {
+    import 'org.apache.camel:camel-core' '2.10.1';
+    import 'org.apache.camel:camel-stream' '2.10.1';
+	shared import com.serli.cameleon.core '1.0.1';
+	import 'org.slf4j:slf4j-simple' '1.6.6';
+	import 'org.apache.camel:camel-restlet' '2.10.1';
+	import 'org.restlet.jse:org.restlet' '2.0.14';
+} 

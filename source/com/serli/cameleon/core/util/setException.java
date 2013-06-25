@@ -14,7 +14,7 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+package com.serli.cameleon.core.util;
 
 import org.apache.camel.Exchange;
 
@@ -23,7 +23,7 @@ import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 
-@Ceylon(major = 4)
+@Ceylon(major = 5)
 @Method
 public class setException {
 	private setException() {}

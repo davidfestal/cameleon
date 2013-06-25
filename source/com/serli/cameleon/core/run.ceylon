@@ -14,20 +14,6 @@
    limitations under the License.
 */
 
-import org.apache.camel.model { ... }
-import org.apache.camel.builder { NativeRouteBuilder = RouteBuilder }
-import org.apache.camel { CamelContext}
-import com.serli.cameleon.model { ... } 
-
-
-shared class Routes({Route(NativeRouteBuilder)+} routesToBuild, CamelContext? theContext = null) {
-	shared object builder extends NativeRouteBuilder(theContext) {
-		shared actual void configure() {
-			for (routeToBuild in routesToBuild) {
-				routeToBuild(this);
-			}
-		}
-	}
-}    
-
-
+doc ("Run the module `com.serli.cameleon.core`.")
+shared void run() {
+}

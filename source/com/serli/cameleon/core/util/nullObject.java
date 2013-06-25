@@ -14,25 +14,26 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+package com.serli.cameleon.core.util;
 
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
+import com.redhat.ceylon.compiler.java.metadata.Ignore;
 import com.redhat.ceylon.compiler.java.metadata.Method;
-import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
+import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
+import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
+import com.redhat.ceylon.compiler.java.runtime.model.TypeDescriptor;
 
-@Ceylon(major = 4)
+@Ceylon(major = 5)
 @Method
-public final class toCeylonString {
+public final class nullObject {
 
-    private toCeylonString() {}
+    private nullObject() {}
 
-    @TypeInfo("ceylon.language::String")
-    public static java.lang.String toCeylonString(
-    @Name("string")
-    @TypeInfo("java.lang::String")
-    final java.lang.String string) {
-        return string;
+    @TypeParameters({ @TypeParameter(value="Element") })
+    @TypeInfo("Element")
+    public static <Element> Element nullObject(@Ignore TypeDescriptor td) {
+        return null;
     }
     
 }

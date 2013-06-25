@@ -15,21 +15,22 @@
 */
 
 import org.apache.camel.builder { NativeRouteBuilder = RouteBuilder }
-import org.apache.camel.model { ... }
+import org.apache.camel.model { RouteDefinition, ProcessDefinition, ToDefinition, ChoiceDefinition, WhenDefinition, OtherwiseDefinition }
 import org.apache.camel { Processor, Endpoint, ExchangePattern}
-import com.serli.cameleon.util { addOutput, toProcessorModels, setOtherwise }
+import com.serli.cameleon.core.util { addOutput, toProcessorModels, setOtherwise }
+import com.serli.cameleon.core { RouteBuilder }
 
 shared class Route(Sequence<Endpoint|String> from, 
 {<ProcessorModel | String | Endpoint>+} steps, 
-NativeRouteBuilder builder) {
+RouteBuilder builder) {
 	shared RouteDefinition definition;
 	value firstEndpoint = from.first;
 
 	if (is Endpoint firstEndpoint) {
-		definition = builder.from(firstEndpoint);
+		definition = builder.nativeBuilder.from(firstEndpoint);
 	}
 	else if (is String firstEndpoint) {
-		definition = builder.from(firstEndpoint);
+		definition = builder.nativeBuilder.from(firstEndpoint);
 	}
 	else {
 		throw Exception("Should never occur !");

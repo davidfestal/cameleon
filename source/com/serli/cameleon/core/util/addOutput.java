@@ -14,27 +14,44 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+package com.serli.cameleon.core.util;
+
+import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
 import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
-import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
-import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
 
-@Ceylon(major = 4)
+@Ceylon(major = 5)
 @Method
-public final class castToPredicate {
-	private castToPredicate() {}
+public final class addOutput {
+	private addOutput() {}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@TypeParameters({ @TypeParameter(value="Element") })
-	@TypeInfo("ceylon.language::Callable<ceylon.language::Boolean,ceylon.language::Tuple<Element,Element,ceylon.language::Empty>>")
-	public static <Element> ceylon.language.Callable<? extends ceylon.language.Boolean> castToPredicate(
-			@Name("predicate") 
+	@SuppressWarnings({ "rawtypes" })
+	@TypeInfo("Anything")
+	public static void addOutput(
+			@Name("container") 
 			@TypeInfo("ceylon.language::Object")
-			final Object predicate) {
-			return (ceylon.language.Callable<? extends ceylon.language.Boolean>) predicate;
+			final Object container, 
+			@Name("output") 
+			@TypeInfo("ceylon.language::Object")
+			final Object output) {
+		if (! (output instanceof ProcessorDefinition)) {
+			return;
+		}
+		
+		if (! (container instanceof ProcessorDefinition)) {
+			return;
+		}
+		
+		ProcessorDefinition processor = (ProcessorDefinition) output;
+		if (container instanceof RouteDefinition) {
+			((RouteDefinition) container).addOutput(processor);
+		}
+		else if (container instanceof ProcessorDefinition) {
+			((ProcessorDefinition) container).addOutput(processor);
+		}
     }
 }

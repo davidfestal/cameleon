@@ -14,4 +14,4 @@
    limitations under the License.
 */
 
-shared package com.serli.cameleon.model;
+shared package com.serli.cameleon.core;

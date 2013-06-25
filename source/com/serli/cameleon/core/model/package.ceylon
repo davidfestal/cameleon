@@ -14,8 +14,4 @@
    limitations under the License.
 */
 
-import org.apache.camel.model.language { ExpressionDefinition }
-
-shared abstract class ExpressionBase() {
-	shared formal ExpressionDefinition definition;
-}
+shared package com.serli.cameleon.core.model;

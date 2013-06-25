@@ -17,13 +17,15 @@
 import org.apache.camel {
 	NativeMessage = Message, InvalidPayloadException
 }
-import com.serli.cameleon.util { 
+import com.serli.cameleon.core.util { 
 	fromJavaMap,
-	nullObject, clazz
+	nullObject
 }
 
 import javax.activation { DataHandler }
-import com.serli.cameleon { Exchange }
+import com.serli.cameleon.core { Exchange }
+import ceylon.language.metamodel { ... }
+import ceylon.interop.java { javaClass }
 
 shared class Message(nativeMessage) {
 	
@@ -74,20 +76,20 @@ shared class Message(nativeMessage) {
 			nativeMessage.body = body else nullObject();
 	}
 	
-	shared T? bodyAs<T>(T() type) {
-		return nativeMessage.getBody(clazz(type));
+	shared T? bodyAs<T>() {
+			return nativeMessage.getBody(javaClass<T>());
 	}	
 	
-	shared void setBodyAs<T>(T? body, T() type) {
-		nativeMessage.setBody(body else nullObject(), clazz(type));
+	shared void setBodyAs<T>(T? body) {
+		nativeMessage.setBody(body else nullObject(), javaClass<T>());
 	}	
 
 	shared void setHeader(String name, Object header) {
 		nativeMessage.setHeader(name, header);
 	}
 
-	shared T? headerAs<T>(String header, T() type) {
-		return nativeMessage.getHeader(header, clazz(type));
+	shared T? headerAs<T>(String header) {
+		return nativeMessage.getHeader(header, javaClass<T>());
 	}
 	
 	throws(InvalidPayloadException, "If the body is null")
@@ -95,8 +97,8 @@ shared class Message(nativeMessage) {
 		return nativeMessage.mandatoryBody;
 	}
 
-	shared T mandatoryBodyAs<T>(T() type) {
-		return nativeMessage.getMandatoryBody<T>(clazz(type)); 
+	shared T mandatoryBodyAs<T>() {
+		return nativeMessage.getMandatoryBody<T>(javaClass<T>()); 
 	}
 	
 	shared Boolean hasAttachments {

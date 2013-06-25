@@ -14,34 +14,27 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+package com.serli.cameleon.core.util;
 
 import com.redhat.ceylon.compiler.java.metadata.Ceylon;
 import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
-import com.redhat.ceylon.compiler.java.metadata.Ignore;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
-import com.redhat.ceylon.compiler.java.runtime.model.TypeDescriptor;
 
-@Ceylon(major = 4)
+@Ceylon(major = 5)
 @Method
-public final class clazz {
-	private clazz() {}
+public final class castToPredicate {
+	private castToPredicate() {}
 	
-	private final static String prefixToDrop = "ceylon.language::Callable<";
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@TypeParameters({ @TypeParameter(value="Element") })
-	@TypeInfo("java.lang::Class<Element>")
-	public static <Element> Class<Element> clazz(
-	        @Ignore TypeDescriptor td,
-			@Name("callable") 
-			@TypeInfo("ceylon.language::Callable<Element,ceylon.language::Empty>")
-			final Object callable) throws ClassNotFoundException {
-			String callableString = callable.toString();
-			String className = callableString.replace(prefixToDrop, "");
-			className = className.substring(0, className.length()-1).replace("::", ".");
-			return (Class<Element>) Class.forName(className);
+	@TypeInfo("ceylon.language::Callable<ceylon.language::Boolean,ceylon.language::Tuple<Element,Element,ceylon.language::Empty>>")
+	public static <Element> ceylon.language.Callable<? extends ceylon.language.Boolean> castToPredicate(
+			@Name("predicate") 
+			@TypeInfo("ceylon.language::Object")
+			final Object predicate) {
+			return (ceylon.language.Callable<? extends ceylon.language.Boolean>) predicate;
     }
 }

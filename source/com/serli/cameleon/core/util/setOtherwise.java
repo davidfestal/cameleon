@@ -14,7 +14,7 @@
    limitations under the License.
 */
 
-package com.serli.cameleon.util;
+package com.serli.cameleon.core.util;
 
 import org.apache.camel.model.ChoiceDefinition;
 import org.apache.camel.model.OtherwiseDefinition;
@@ -24,7 +24,7 @@ import com.redhat.ceylon.compiler.java.metadata.Method;
 import com.redhat.ceylon.compiler.java.metadata.Name;
 import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
 
-@Ceylon(major = 4)
+@Ceylon(major = 5)
 @Method
 public final class setOtherwise {
 	private setOtherwise() {}

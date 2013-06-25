@@ -14,4 +14,25 @@
    limitations under the License.
 */
 
-shared package com.serli.cameleon;
+package com.serli.cameleon.core.util;
+
+import com.redhat.ceylon.compiler.java.metadata.Ceylon;
+import com.redhat.ceylon.compiler.java.metadata.Method;
+import com.redhat.ceylon.compiler.java.metadata.Name;
+import com.redhat.ceylon.compiler.java.metadata.TypeInfo;
+
+@Ceylon(major = 5)
+@Method
+public final class toCeylonString {
+
+    private toCeylonString() {}
+
+    @TypeInfo("ceylon.language::String")
+    public static java.lang.String toCeylonString(
+    @Name("string")
+    @TypeInfo("java.lang::String")
+    final java.lang.String string) {
+        return string;
+    }
+    
+}
